@@ -2,36 +2,196 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#0c1525">
-<meta name="description" content="Navl（ナブル）は日本語音声案内とオフライン地図に対応するAndroid向けカーナビの試作アプリです。">
-<title>Navl（ナブル）｜Android向けカーナビ</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101614">
+<meta name="description" content="Navl（ナブル）は、縦横の画面、日本語音声案内、オフライン地図に対応したAndroid向けカーナビです。">
+<title>Navl（ナブル） — Androidカーナビ</title>
 <style>
-:root{color-scheme:dark;--bg:#0c1525;--panel:#15243a;--line:#31445f;--text:#f5f8fe;--muted:#b9c7de;--blue:#a8caff}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.75 system-ui,sans-serif}a{color:var(--blue);text-underline-offset:.25em}a:focus-visible{outline:2px solid var(--blue);outline-offset:5px}.wrap{width:min(1040px,100% - 40px);margin:auto}header,footer{border-bottom:1px solid var(--line);padding:16px 0}header .wrap{display:flex;justify-content:space-between;align-items:center}.brand{font-size:21px;font-weight:750}.hero{display:grid;grid-template-columns:1fr .9fr;gap:30px;align-items:center;padding:62px 0 38px}.badge{display:inline-block;border:1px solid var(--line);background:var(--panel);padding:3px 11px;border-radius:99px;color:var(--blue);font-size:13px}h1{font-size:clamp(68px,12vw,112px);line-height:1;margin:14px 0 6px;letter-spacing:-.065em}h2{line-height:1.4;margin:0 0 12px}p{margin:0 0 14px;color:var(--muted)}.actions{display:flex;flex-wrap:wrap;gap:18px;align-items:center;margin:24px 0 10px}.button{background:var(--blue);color:#142743;padding:10px 17px;border-radius:8px;text-decoration:none;font-weight:750}.map{width:100%;height:auto;background:var(--panel);border:1px solid var(--line);border-radius:18px}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:8px 0 35px}.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:17px}.card h3{margin:0 0 8px}.card p{margin:0}.notes{padding:26px 0;border-top:1px solid var(--line)}footer{border-top:1px solid var(--line);color:var(--muted);font-size:13px}@media(max-width:690px){.hero,.grid{grid-template-columns:1fr}.hero{padding:30px 0 20px;gap:15px}.map{max-height:290px}.wrap{width:calc(100% - 32px)}}
+:root{color-scheme:dark;--bg:#101614;--panel:#19211e;--white:#f0f6f1;--muted:#a9bab0;--mint:#bcfbb8;--border:#34443b;--measure:1120px}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:85px}
+body{margin:0;background:var(--bg);color:var(--white);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;line-height:1.65}
+a{color:inherit;text-underline-offset:.22em}
+:focus-visible{outline:2px solid var(--mint);outline-offset:5px}
+img{display:block;max-width:100%;height:auto}
+.wrap{width:min(var(--measure),calc(100% - 48px));margin-inline:auto}
+header{position:sticky;top:0;z-index:2;background:#101614ec;border-bottom:1px solid #ffffff17;backdrop-filter:blur(18px)}
+nav{display:flex;min-height:62px;align-items:center;justify-content:space-between;gap:16px}
+.brand{display:flex;align-items:center;gap:9px;font-size:22px;font-weight:800;letter-spacing:-.05em;text-decoration:none}
+.brand svg{width:23px;color:var(--mint)}
+.navlinks{display:flex;align-items:center;gap:clamp(12px,4vw,35px);font-size:13px}
+.navlinks a{text-decoration:none}
+.button{display:inline-flex;align-items:center;justify-content:center;gap:9px;border-radius:999px;background:var(--mint);color:#102015;padding:12px 22px;font-weight:750;text-decoration:none}
+.button.small{padding:6px 15px}
+.hero{overflow:hidden;text-align:center;background:radial-gradient(ellipse at 50% 85%,#285a43 0%,#192d24 37%,#101614 75%)}
+.hero .wrap{padding:clamp(55px,9vw,108px) 0 0}
+.eyebrow{font-size:12px;color:var(--mint);font-weight:750;letter-spacing:.14em;margin:0 0 12px}
+h1,h2,h3,p,figure{margin:0}
+h1{font-size:clamp(84px,15vw,182px);line-height:.82;letter-spacing:-.087em;padding-right:.08em;font-weight:800}
+.hero h2{font-size:clamp(23px,4.3vw,50px);margin:24px 0 9px;letter-spacing:-.055em}
+.lede{color:var(--muted);font-size:clamp(14px,2vw,18px)}
+.actions{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:18px;margin-top:24px}
+.secondary{color:var(--mint);font-size:14px}
+.hero-picture{--travel:0px;max-width:890px;margin:44px auto 0;transform:translateY(var(--travel))}
+.hero-picture img{width:100%;border:8px solid #111914;border-radius:25px 25px 0 0;box-shadow:0 8px 55px #0008}
+.hero-caption{font-size:12px;color:#ccdbd2;background:#172720;padding:10px 0}
+section.content{padding:clamp(64px,10vw,112px) 0}
+.section-title{font-size:clamp(30px,5.7vw,68px);line-height:1.12;letter-spacing:-.055em;margin:0 0 17px}
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin:24px 0 17px}
+.tabs button,.zoom,.close{font:inherit;color:var(--white);background:#202b25;border:1px solid var(--border);border-radius:999px;padding:8px 15px;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--mint);border-color:var(--mint);color:#102015;font-weight:750}
+[hidden]{display:none!important}
+.slide{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(0,1fr);gap:clamp(24px,5vw,62px);align-items:center;background:radial-gradient(ellipse at 20% 80%,#263f32,var(--panel) 70%);padding:clamp(18px,5vw,54px);border:1px solid var(--border);border-radius:25px;min-height:490px}
+.slide figure{display:grid;justify-items:center;gap:13px}
+.slide img{max-height:440px;width:auto;border:5px solid #0c1310;border-radius:19px;box-shadow:0 12px 32px #0006}
+.slide h3{font-size:clamp(23px,3.7vw,40px);line-height:1.22;letter-spacing:-.045em;margin:0 0 14px}
+.slide p,.facts p,details p{color:var(--muted)}
+.zoom{font-size:13px}
+dialog{background:#0e1511;color:var(--white);border:1px solid var(--border);border-radius:21px;padding:14px;max-width:min(96vw,1160px);max-height:94vh}
+dialog::backdrop{background:#030704dd}
+dialog .close{display:block;margin:0 0 10px auto}
+dialog img{max-height:78vh;max-width:100%;object-fit:contain;margin:auto}
+.dark-section{background:#141e19;border-block:1px solid #ffffff0f}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:27px}
+.facts article{padding:23px;border:1px solid var(--border);border-radius:19px;background:var(--panel)}
+.facts h3{margin:0 0 7px;font-size:20px}
+.download{text-align:center}
+.download .details{max-width:730px;margin:35px auto 0;text-align:left}
+details{border-top:1px solid var(--border);padding:14px 0}
+details summary{cursor:pointer;font-weight:700}
+details p{padding-top:8px}
+footer{border-top:1px solid var(--border);padding:24px 0;color:var(--muted);font-size:13px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px}
+@media(max-width:690px){.wrap{width:calc(100% - 32px)}.slide,.facts{grid-template-columns:1fr}.slide{min-height:0}.slide figure{order:2}.slide img{max-height:385px}.hero-picture{margin-top:30px}.hero-picture img{border-width:5px}.navlinks{gap:12px}}
+@media(max-width:350px){.navlinks a:first-child{display:none}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.hero-picture{transform:none}}
 </style>
 </head>
 <body>
-<header><div class="wrap"><span class="brand">Navl</span><a href="https://github.com/ranmaru1115-new/Navl-releases">GitHub</a></div></header>
-<main class="wrap">
-<section class="hero"><div>
-<span class="badge">Android · v0.1.0 プレビュー</span><h1>Navl</h1><h2>日本語で案内する<br>Androidカーナビ</h2>
-<p>ナブルは、地図表示、目的地検索、ルート案内をひとつにまとめたカーナビの試作アプリです。</p>
-<div class="actions"><a class="button" href="https://github.com/ranmaru1115-new/Navl-releases/releases/download/v0.1.0/Navl-v0.1.0.apk">APKをダウンロード</a><a href="https://github.com/ranmaru1115-new/Navl-releases/releases/tag/v0.1.0">リリース詳細</a></div><p>Android 8.0 以降 · 縦画面・横画面に対応</p>
+<header>
+<nav class="wrap" aria-label="ページ内ナビゲーション">
+<a class="brand" href="#" aria-label="Navl トップ"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2.8 21 20l-9-3.5L3 20 12 2.8Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M12 3v13.5" stroke="currentColor" stroke-width="1.5"/></svg>Navl</a>
+<div class="navlinks"><a href="#screens">画面を見る</a><a class="button small" href="#download">ダウンロード</a></div>
+</nav>
+</header>
+<main>
+<section class="hero" aria-labelledby="title">
+<div class="wrap">
+<p class="eyebrow">ANDROID カーナビ</p>
+<h1 id="title">Navl</h1>
+<h2>次の曲がり角が、見えてくる。</h2>
+<p class="lede">日本語音声案内とオフライン地図を、いつものAndroidに。</p>
+<div class="actions"><a class="button" href="#download">Android版を入手 <span aria-hidden="true">↓</span></a><a class="secondary" href="#screens">アプリの画面を見る</a></div>
+<figure class="hero-picture" id="hero-picture"><img src="navl-landscape.webp" width="1200" height="540" alt="横向きのNavlで東京駅周辺の地図を表示" fetchpriority="high"></figure>
 </div>
-<svg class="map" viewBox="0 0 440 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="道路と経路のイメージ">
-<path fill="#1f334c" d="M0 24h164l91 78-46 48-98-26L0 172zm440 176v130H288l-36-81 42-44z"/>
-<path fill="none" stroke="#324d68" stroke-width="8" d="M-15 60l139 25 61 103 29 159M9 291l94-22 76-68 46-63 145-83 77-9M-5 210l133-28 113 9 96-55 111-16M88-15l39 100 98 53 78 50 51 146M311-20l-18 105 4 68 131 176"/>
-<path fill="none" stroke="#80b4ff" stroke-linecap="round" stroke-linejoin="round" stroke-width="9" d="M80 274l23-5 76-68 46-63 145-83"/>
-<circle cx="80" cy="274" r="11" fill="#80b4ff" stroke="#d8e9ff" stroke-width="4"/><circle cx="370" cy="55" r="12" fill="#e7f1ff" stroke="#80b4ff" stroke-width="5"/>
-</svg></section>
-<section class="grid" aria-label="主な機能">
-<article class="card"><h3>地図と音声案内</h3><p>現在地を表示し、目的地までのルートを日本語音声で案内します。</p></article>
-<article class="card"><h3>オフライン地図</h3><p>九州・沖縄などは広域表示用に一括保存。圏外での検索や経路探索には詳細地域を保存します。</p></article>
-<article class="card"><h3>施設から案内を開始</h3><p>地図上の施設をタップして詳細を開き、ルート探索に進めます。</p></article>
+<p class="hero-caption">Navl v0.1.1 開発版のエミュレーター画面</p>
 </section>
-<section class="notes"><h2>インストール</h2><p>Android端末でダウンロードしたAPKを開いてインストールします。端末から確認を求められた場合は、使用しているブラウザーやファイル管理アプリにインストールを許可します。</p><p>開発用ビルドとは署名が異なります。開発用ビルドをアンインストールすると、端末内の設定や保存済み地図が消えます。</p></section>
-<section class="notes"><h2>データとライセンス</h2><p>オンラインで地図・検索・経路を使うと、表示範囲、検索語、経路の始点と終点が、それぞれの提供元に送信されます。Firebase Analyticsは標準の利用イベントを記録します。広告ID収集と広告のパーソナライズは無効です。<a href="https://firebase.google.com/support/privacy">Firebaseのプライバシー情報</a></p>
-<p>地図は © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>、<a href="https://opendatacommons.org/licenses/odbl/1-0/">ODbL 1.0</a>。配信元はOpenFreeMap、OpenMapTiles、Geofabrik。同梱地図データはリリース詳細から取得できます。</p>
-<p>同梱案内音声はOpen JTalkとHTS Voice NIT ATR503 M001で生成し、<a href="https://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>で提供します。音声モデル © 2003–2012 Nagoya Institute of Technology, Department of Computer Science、© 2003–2008 Tokyo Institute of Technology, Interdisciplinary Graduate School of Science and Engineering。</p></section>
-</main><footer><div class="wrap">Navl（ナブル） · Android プレビュー</div></footer>
-</body></html>
+<section class="content wrap" id="screens" aria-labelledby="screens-title">
+<p class="eyebrow">アプリ画面</p>
+<h2 class="section-title" id="screens-title">Navlを見てみる。</h2>
+<p class="lede">画面を切り替えて、地図とオフライン機能を確認できます。</p>
+<div class="tabs" id="screen-tabs" hidden>
+<button id="tab-map" type="button" aria-controls="screen-map">地図</button>
+<button id="tab-landscape" type="button" aria-controls="screen-landscape">横画面</button>
+<button id="tab-offline" type="button" aria-controls="screen-offline">オフライン</button>
+</div>
+<article class="slide" id="screen-map" aria-labelledby="tab-map">
+<figure><img src="navl-portrait.webp" width="540" height="1200" alt="縦向き画面で現在地と東京駅周辺の地図を表示" loading="lazy"><button class="zoom" type="button" hidden>地図の画像を拡大</button></figure>
+<div><p class="eyebrow">01 / 地図</p><h3>現在地から、すぐに出発。</h3><p>地図上で現在地を確認し、目的地を探してルートを表示。走行中は日本語音声が曲がる場所を案内します。</p></div>
+</article>
+<article class="slide" id="screen-landscape" aria-labelledby="tab-landscape">
+<figure><img src="navl-landscape.webp" width="1200" height="540" alt="横向き画面で東京駅周辺の地図を表示" loading="lazy"><button class="zoom" type="button" hidden>横画面の画像を拡大</button></figure>
+<div><p class="eyebrow">02 / 横画面</p><h3>広い画面で、地図を見渡す。</h3><p>スマートフォンを横にしたときも、タブレットに載せたときも、地図と操作ボタンが画面の向きに合わせて並びます。</p></div>
+</article>
+<article class="slide" id="screen-offline" aria-labelledby="tab-offline">
+<figure><img src="navl-offline.webp" width="540" height="1200" alt="オフライン地図の保存地域を管理するNavlの画面" loading="lazy"><button class="zoom" type="button" hidden>オフラインの画像を拡大</button></figure>
+<div><p class="eyebrow">03 / オフライン</p><h3>電波の届かない区間に備える。</h3><p>出発前に使うエリアを保存。保存した地図をオフラインで表示し、経路データのある地域ではオフライン経路探索も利用できます。</p></div>
+</article>
+</section>
+<section class="content dark-section" aria-labelledby="features-title">
+<div class="wrap">
+<p class="eyebrow">機能</p><h2 class="section-title" id="features-title">出発前から、到着まで。</h2>
+<div class="facts">
+<article><h3>目的地検索</h3><p>施設名で探すか、地図上の施設をタップ。施設の詳細から案内を始められます。</p></article>
+<article><h3>日本語音声案内</h3><p>曲がる場所や進行方向を読み上げます。利用できる音声は端末の読み上げ設定に依存します。</p></article>
+<article><h3>地域を選んで保存</h3><p>必要な範囲を選び、地図を端末に保存。対応する経路データを用意した地域では圏外でもルートを利用できます。</p></article>
+</div>
+</div>
+</section>
+<section class="content download wrap" id="download" aria-labelledby="download-title">
+<p class="eyebrow">ANDROID 向け</p><h2 class="section-title" id="download-title">Navlをダウンロード。</h2>
+<p class="lede">現在配布中の v0.1.0 はプレビュー版です。</p>
+<div class="actions"><a class="button" href="https://github.com/ranmaru1115-new/Navl-releases/releases/download/v0.1.0/Navl-v0.1.0.apk">APKをダウンロード <span aria-hidden="true">↓</span></a><a class="secondary" href="https://github.com/ranmaru1115-new/Navl-releases/releases/tag/v0.1.0">リリースノートとSHA-256</a></div>
+<div class="details">
+<details><summary>Androidにインストールするには？</summary><p>APKを端末で開き、Androidの画面に沿ってインストールしてください。現在地の表示と案内には、位置情報の許可が必要です。</p></details>
+<details><summary>オフラインで使うには？</summary><p>通信できる場所で、必要な地域をアプリに保存してください。オフライン経路探索は経路データの収録範囲に限られます。</p></details>
+<details><summary>サイトのスクリーンショットについて</summary><p>v0.1.1 の開発版をAndroidエミュレーターで動かし、東京駅周辺を表示して撮影しました。</p></details>
+</div>
+</section>
+</main>
+<footer><div class="wrap"><span>Navl（ナブル）</span><a href="https://www.openstreetmap.org/copyright">地図データ © OpenStreetMap contributors</a><a href="https://github.com/ranmaru1115-new/Navl-releases/releases">GitHub Releases</a></div></footer>
+<dialog id="image-dialog" aria-label="スクリーンショット拡大表示"><form method="dialog"><button class="close">閉じる</button></form><img alt=""></dialog>
+<script>
+const tabList = document.querySelector('#screen-tabs');
+const tabs = Array.from(tabList.querySelectorAll('button'));
+const panels = tabs.map(tab => document.getElementById(tab.getAttribute('aria-controls')));
+function selectTab(selected) {
+  tabs.forEach((tab, index) => {
+    const active = index === selected;
+    tab.setAttribute('aria-selected', active);
+    tab.tabIndex = active ? 0 : -1;
+    panels[index].hidden = !active;
+  });
+}
+tabList.setAttribute('role', 'tablist');
+tabList.setAttribute('aria-label', 'アプリ画面の切り替え');
+tabs.forEach((tab, index) => {
+  tab.setAttribute('role', 'tab');
+  panels[index].setAttribute('role', 'tabpanel');
+  tab.addEventListener('click', () => selectTab(index));
+  tab.addEventListener('keydown', event => {
+    let next;
+    switch (event.key) {
+      case 'ArrowRight': next = (index + 1) % tabs.length; break;
+      case 'ArrowLeft': next = (index - 1 + tabs.length) % tabs.length; break;
+      case 'Home': next = 0; break;
+      case 'End': next = tabs.length - 1; break;
+      default: return;
+    }
+    event.preventDefault();
+    selectTab(next);
+    tabs[next].focus();
+  });
+});
+selectTab(0);
+tabList.hidden = false;
+const dialog = document.querySelector('#image-dialog');
+const enlarged = dialog.querySelector('img');
+document.querySelectorAll('.zoom').forEach(button => {
+  button.hidden = false;
+  button.addEventListener('click', () => {
+    const photo = button.previousElementSibling;
+    enlarged.src = photo.currentSrc || photo.src;
+    enlarged.alt = photo.alt;
+    dialog.showModal();
+  });
+});
+dialog.addEventListener('click', event => {
+  if (event.target === dialog) dialog.close();
+});
+const picture = document.querySelector('#hero-picture');
+const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+let frame = null;
+function drawHero() {
+  frame = null;
+  const offset = motion.matches ? 0 : Math.min(window.scrollY * 0.075, 24);
+  picture.style.setProperty('--travel', offset + 'px');
+}
+window.addEventListener('scroll', () => {
+  if (frame === null) frame = window.requestAnimationFrame(drawHero);
+}, { passive: true });
+motion.addEventListener('change', drawHero);
+drawHero();
+</script>
+</body>
+</html>
